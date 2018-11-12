@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { conUrl } from './config'; 
 
 export function login(params) {
-    return axios.get('http://localhost/project/sign/login.php',{
+    return axios.get( conUrl, {
         param: params
     }).then((res) => {
         console.log(res)

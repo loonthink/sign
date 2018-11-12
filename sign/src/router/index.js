@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/login/login'
+import Test from '@/testData/login'
 
 Vue.use(ElementUI)
 
@@ -17,13 +18,17 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/he',
       name: 'HelloWorld',
       component: HelloWorld
     }, {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: Login
+    }, {
+      path: '/test',
+      name: 'test',
+      component: Test
     }
   ]
 })

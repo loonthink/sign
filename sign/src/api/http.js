@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { conUrl } from './config'; 
+import { conUrl, sessionUrl } from './config'; 
+
+// 携带cookie,否则不能添加
+axios.defaults.withCredentials = true;
 
 /**
  * post 提交数据,需要使用qs.stringfy处理下数据
@@ -9,6 +12,13 @@ import qs from 'qs';
 
 export function login(params) {
     return axios.post( conUrl, qs.stringify(params)).then((res) => {
+        console.log(res)
+        return Promise.resolve(res.data);
+    })
+}
+
+export function testSession(params) {
+    return axios.post( sessionUrl, qs.stringify(params)).then((res) => {
         console.log(res)
         return Promise.resolve(res.data);
     })

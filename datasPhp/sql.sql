@@ -10,3 +10,5 @@ create table if not exists sign_user (
 	`password` varchar(10) NOT NULL,
 	`is_admin` tinyint NOT NULL DEFAULT 0
 ) DEFAULT CHARSET = UTF8;
+
+insert into sign_user (name, password) values ('zhang','zf888888');

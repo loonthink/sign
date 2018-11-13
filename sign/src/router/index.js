@@ -6,13 +6,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/login/login'
+import Index from '@/components/index/index'
 import Test from '@/testData/login'
 
 Vue.use(ElementUI)
 
 Vue.use(Router)
-
-
 
 export default new Router({
   mode: 'history',
@@ -29,6 +28,10 @@ export default new Router({
       path: '/test',
       name: 'test',
       component: Test
+    }, {
+      path: '/index',
+      name: 'index',
+      component: Index
     }
   ]
 })

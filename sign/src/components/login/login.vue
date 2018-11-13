@@ -22,7 +22,8 @@
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('login')">login</el-button>
-            <el-button @click="resetForm('login')">cancle</el-button>
+            <el-button type="primary" @click="submitForm('register')">Register</el-button>
+            <el-button type="info" @click="resetForm('login')">cancle</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -55,7 +56,8 @@
           name: '',
           pass: '',
           checkPass: '',
-          delivery: ''
+          delivery: false,
+          type: ''
         },
         loginRules: {
             name: [
@@ -72,14 +74,15 @@
       }
     },
     methods: {
-      submitForm(formName) {
+      submitForm(type) {
         var self = this;
-        this.$refs[formName].validate((valid) => {
+        self.form.type = type;
+        this.$refs.login.validate((valid) => {
           if (valid) {
             login(self.form).then((res) => {
                 console.log(res)
+                self.open(res);
             });
-            alert('submit!');
           } else {
             console.log('error submit!!');
             return false;
@@ -88,6 +91,17 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      open(data) {
+        var self = this;
+        this.$alert( data.msg, '提示:', {
+          confirmButtonText: '确定',
+          callback: action => {
+            if(data.code == 0) {
+              self.$router.push('/index');
+            }
+          }
+        });
       }
     }
   }

@@ -1,6 +1,6 @@
 <?php
 
-    include_once('sql.class.php');
+    include_once('../signOtherClass/sql.class.php');
 
     class login_pro {
         private $name;
@@ -29,14 +29,14 @@
                     echo json_encode(['code'=>1, 'msg'=>'password error']);
                 }
             } else {
-                echo json_encode(['code'=>0, 'msg'=>'username not exist']);
+                echo json_encode(['code'=>1, 'msg'=>'username not exist']);
             }
         }
 
         public function insertUser() {
             
             if($this->checkUsername()) {
-                echo json_encode(['code'=>0, 'msg'=>'username exist']);
+                echo json_encode(['code'=>1, 'msg'=>'username exist']);
                 return;
             }
 

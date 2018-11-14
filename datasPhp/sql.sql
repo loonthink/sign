@@ -1,3 +1,16 @@
+# DCL（Data Control Language）数据库控制语言  授权，角色控制等
+
+# DTL（Data Transaction Language)  数据事务语言 
+
+# DDL（Data Definition Language）数据库定义语言
+
+# DQL (数据查询语言)关键字：selet 
+
+# DML（Data Manipulation Language）数据操纵语言
+#	1) 插入：INSERT
+#	2) 更新：UPDATE
+#	3) 删除：DELETE
+
 create database sign;
 
 use sign;

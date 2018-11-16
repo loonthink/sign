@@ -10,6 +10,14 @@
 	$user_name = $_REQUEST['name'];
 	$user_pass = $_REQUEST['pass'];
 	$user_type = $_REQUEST['type'];
+	$checkCode = $_REQUEST['checkCode'];
+	
+	$user_checkCode = $_SESSION['checkCode'];
+
+	if($user_checkCode != $checkCode) {
+		echo json_encode(['code'=>1, 'msg'=>'chekcode error']);
+		return;
+	}
 
 	$login_conn = new login_pro($user_name, $user_pass);
 	switch($user_type) {

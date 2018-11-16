@@ -5,7 +5,7 @@
 
         public function __construct($sql) {
 
-            $mysql_config=simplexml_load_file("config.xml");
+            $mysql_config=simplexml_load_file("../config.xml");
 
             $this->conn = new mysqli($mysql_config->host,$mysql_config->user,$mysql_config->pass,$mysql_config->database);
 

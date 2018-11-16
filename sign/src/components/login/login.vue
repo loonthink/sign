@@ -16,9 +16,9 @@
         <el-form-item label="确认密码" prop="checkPass">
             <el-input type="password" v-model="form.checkPass" autocomplete="off"></el-input>
         </el-form-item>
-
-        <el-form-item label="下次免登陆">
-            <el-switch v-model="form.delivery"></el-switch>
+        <el-form-item label="验证码" prop="checkCode">
+            <el-input type="text" v-model="form.checkCode"></el-input>
+            <img :src="checkCode" alt="" @click=updateCheckCode />
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('login')">login</el-button>
@@ -29,6 +29,7 @@
 </template>
 <script>
   import { login } from '@/api/http';
+  import { checkCode } from '@/api/config';
 
   export default {
     data() {
@@ -52,11 +53,12 @@
         }
       };
       return {
+        checkCode: checkCode,
         form: {
           name: '',
           pass: '',
           checkPass: '',
-          delivery: false,
+          checkCode: '',
           type: ''
         },
         loginRules: {
@@ -69,6 +71,9 @@
             ],
             checkPass: [
                 { validator: validatePass2, trigger: 'blur' }
+            ],
+            checkCode: [
+                { required: true, message: '请输入验证码', trigger: 'blur' }
             ]
         }
       }
@@ -102,6 +107,9 @@
             }
           }
         });
+      },
+      updateCheckCode(e) {
+        this.checkCode = this.checkCode + '?t='+ Math.random();
       }
     }
   }

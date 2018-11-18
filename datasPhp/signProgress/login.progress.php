@@ -12,6 +12,7 @@
 	$user_type = $_REQUEST['type'];
 	$checkCode = $_REQUEST['checkCode'];
 	
+	
 	$user_checkCode = $_SESSION['checkCode'];
 
 	if($user_checkCode != $checkCode) {

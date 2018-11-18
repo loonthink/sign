@@ -24,7 +24,9 @@
                 if($this->password == $user['password']) {
                     echo json_encode(['code'=>0, 'msg'=>'welcome to your work']);
                     $sess_user = array('username'=>$this->name,'password'=>$this->password);
+                    session_start();
                     $_SESSION["user"]=$sess_user;
+                    $_SESSION["userId"]=$user['id'];
                 } else {
                     echo json_encode(['code'=>1, 'msg'=>'password error']);
                 }

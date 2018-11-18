@@ -11,6 +11,10 @@
 #	2) 更新：UPDATE
 #	3) 删除：DELETE
 
+# 删除表 DROP TABLE TABLE_NAME
+# 清空表 truncate table table_name;
+#       delete from table_name;
+
 create database sign;
 
 use sign;
@@ -25,3 +29,14 @@ create table if not exists sign_user (
 ) DEFAULT CHARSET = UTF8;
 
 insert into sign_user (name, password) values ('zhang','zf888888');
+
+create table if not exists sign_time (
+	`id` int primary key AUTO_INCREMENT,
+	`user_id` int not null,
+	`month` varchar(10) not null,
+	`date` date not null,
+	`startTime` time DEFAULT null,
+	`endTime` time DEFAULT null,
+	`overTime` int DEFAULT 0,
+	`meal_money` int DEFAULT 18
+) DEFAULT CHARSET = UTF8;

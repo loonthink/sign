@@ -1,53 +1,147 @@
 <template>
     <div id="index">
-        <span class="demonstration">默认</span>
         <el-date-picker
-            v-model="date"
+            v-model="dutyTime.date"
             type="date"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
             placeholder="选择日期">
         </el-date-picker>
          <el-time-picker
-            v-model="startTime"
+            arrow-control
+            v-model="dutyTime.startTime"
             :picker-options="{
                 selectableRange: '08:00:00 - 10:30:00'
             }"
-            default-value = "08:00:00"
+            value-format="HH:mm:ss"
             placeholder="任意时间点">
         </el-time-picker>
         <el-time-picker
             arrow-control
-            v-model="endTime"
+            v-model="dutyTime.endTime"
             :picker-options="{
-                selectableRange: '17:30:00 - 20:30:00'
+                selectableRange: '15:30:00 - 22:30:00'
             }"
-            default-value=""
+            value-format="HH:mm:ss"
             placeholder="任意时间点">
         </el-time-picker>
-        <el-button type="primary" @click=startTime>保存</el-button>
+        <el-button type="primary" @click=startTime>PUNCH CARD</el-button>
+
+        <div
+            class="record"
+        >
+            <el-date-picker
+            v-model="dutyTime.month"
+            type="month"
+            placeholder="选择月"
+            value-format="MM"
+            format="MM"
+            >
+            </el-date-picker>
+            <el-button type="primary" @click=showRecord>SHOWRECORD</el-button>
+            <el-button type="primary" @click=monSummary>MONSUMMARY</el-button>
+        </div>
+
+        <div 
+            class="record"
+            v-if="isShowRecord"
+        
+        >
+            <el-table
+                :data="tableData"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                prop="date"
+                label="DATE"
+                width="180">
+                </el-table-column>
+                <el-table-column
+                prop="startTime"
+                label="ONDUTY"
+                width="180">
+                </el-table-column>
+                <el-table-column
+                prop="endTime"
+                label="OFFDUTY">
+                </el-table-column>
+                <el-table-column
+                fixed="right"
+                label="OPERATE"
+                width="100">
+                <template slot-scope="scope">
+                    <el-button @click="handleClick(scope)" type="text" size="small">修改</el-button>
+                </template>
+                </el-table-column>
+            </el-table>
+        </div>
+
+        <div 
+            class="record"
+            v-if="isShowSummary"
+        >
+            <el-table
+                :data="summaryTable"
+                stripe
+                style="width: 100%">
+                <el-table-column
+                prop="overTime"
+                label="overTime"
+                width="180">
+                </el-table-column>
+                <el-table-column
+                prop="meal_money"
+                label="meal_money"
+                width="180">
+                </el-table-column>
+            </el-table>
+        </div>
     </div>
 </template>
 
 <script>
-  import { testSession } from '@/api/http';
+  import { testSession, saveTime } from '@/api/http';
 
   export default {
     data() {
         return {
-            onDuty:{
-                date: date,
-                startTime: new Date(2018, 9, 10, 8, 50),
-                endTime: new Date(2018, 9, 10, 17, 30),
+            constVal: {
+                default_time: '2018-08-18 18:00:00',
+                punch_card: 1,
+                showRecode: 2,
+                mon_summary: 3
             },
-            offDuty: {
-
+            dutyTime:{
+                date: '',
+                startTime: '',
+                endTime: '',
+                action: false,
+                month: 0,
+                duration: 0
             },
+            isShowRecord: false,
+            isShowSummary: false,
+            month: 0,
             form: {
                 aa:999,
                 bb:888
             },
             user: {
                 name: ''
-            }
+            },
+            tableData: [],
+            summaryTable: []
+        }
+    },
+    watch: {
+        'dutyTime.endTime': function(newValue, oldValue) {
+            // var defaultTime = (new Date('2018-08-08 18:00:00')).getTime();
+            // var nowVal = '2018-08-08 '+newValue;
+            // console.log(nowVal)
+            // var nowTime = (new Date(nowVal)).getTime();
+            // var hours=Math.floor(leave1/(3600*1000))
+            // console.log(nowTime-defaultTime);
+            // console.log(hours);
         }
     },
     mounted() {
@@ -60,9 +154,114 @@
         });
     },
     methods: {
+        checkDutyTime() {
+            var self = this;
+            if(!!self.dutyTime.date && (!!self.dutyTime.startTime || !!self.dutyTime.endTime)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         startTime() {
+            var self = this;
             
+            if(!self.checkDutyTime()) {
+                self.msg('error','选项漏填');
+                return false;
+            };
+
+            self.dutyTime.action = self.constVal.punch_card;
+
+            saveTime(self.dutyTime).then((res) => {
+                if(!!res.code) {
+                    self.msg('success',res.msg);
+                } else {
+                    self.msg('error',res.msg);
+                }
+            })
+        },
+        msg(type,msg) {
+            this.$notify({
+            message: msg,
+            type: type
+            });
+        },
+        handleClick(scope) {
+            this.dutyTime = scope.row;
+        },
+        showRecord() {
+            var self = this;
+            // if(!self.checkMonth()) return;
+            // self.dutyTime.action = self.constVal.showRecode;
+            // if(self.dutyTime.month != self.month) {
+            //     self.month = self.dutyTime.month;
+            //     self.isShowRecord = true;
+            // } else {
+            //     self.isShowRecord = !self.isShowRecord;
+            //     return;
+            // }
+            if(self.month != 0) {
+                self.month = 0;
+            }
+            if(!self.pre_request('isShowRecord')) return;
+            self.dutyTime.action = self.constVal.showRecode;
+            saveTime(self.dutyTime).then((res) => {
+                self.tableData = res.data;
+            })
+        },
+        checkMonth() {
+            if(!this.dutyTime.month) {
+                this.msg('error', 'your month is null');
+                return false;
+            } else {
+                return true;
+            }
+        },
+        pre_request(actionType) {
+            var self = this;
+            if(!self.checkMonth()) return false;
+            if(self.dutyTime.month != self.month) {
+                self.month = self.dutyTime.month;
+                if( actionType == 'isShowSummary' ) {
+                    self.isShowSummary = true;
+                    self.isShowRecord = false;
+                } else {
+                    self.isShowRecord = true;
+                    self.isShowSummary = false;
+                }
+                return true;
+            } else {
+                self[actionType] = !self[actionType];
+            }
+        },
+        monSummary() {
+            var self = this;
+            // if(!self.checkMonth()) return;
+            // if(self.dutyTime.month != self.month) {
+            //     self.month = self.dutyTime.month;
+            //     self.isShowSummary = true;
+            // } else {
+            //     self.isShowSummary = !self.isShowSummary;
+            //     return;
+            // }
+            if(self.month != 0) {
+                self.month = 0;
+            }
+            if(!self.pre_request('isShowSummary')) return;
+            self.dutyTime.action = self.constVal.mon_summary;
+            saveTime(self.dutyTime).then((res) => {
+                self.summaryTable = res.data;
+            })
         }
     }
   }
 </script>
+
+<style>
+    .record {
+        width: 60%;
+        margin: 50px auto;
+
+    }
+</style>
+

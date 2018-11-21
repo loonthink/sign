@@ -7,12 +7,16 @@
 
     include_once('../signService/saveTimeService.php');
 
-    $date = $_REQUEST['date'];
-    $month = explode('-',$date)[1];
+    $date  = $_REQUEST['date'];
+    $month = 0;
+    if(!empty($date)) {
+        $month = explode('-',$date)[1];
+    }
     $startTime = $_REQUEST['startTime'];
     $endTime = $_REQUEST['endTime'];
     $action = $_REQUEST['action'];
     $mon = $_REQUEST['month'];
+    $id = $_REQUEST['id'];
     $userId = $_SESSION['userId'];
 
     $saveTimeService = new saveTimeService($userId,$date,$month,$startTime,$endTime);
@@ -22,5 +26,7 @@
         $saveTimeService->showAllTime($mon);
     } else if($action == 3) { //显示月结
         $saveTimeService->showSummary($mon);
+    } else if($action == 4) { //显示月结
+        $saveTimeService->deleteErro($id);
     }
 ?>

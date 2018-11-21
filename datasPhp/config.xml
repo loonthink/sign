@@ -2,6 +2,6 @@
 <note>
     <host>localhost</host>
     <user>root</user>
-    <pass>123</pass>
+    <pass></pass>
     <database>sign</database>
 </note>

@@ -88,10 +88,13 @@
         }
 
         public function showAllTime($mon) {
-            $select_sql = 'select * from '.self::$table_name.' where month='.$mon.' order by date asc';
+            $startDate = '2018-'.($mon-1).'-26';
+            $endDate   = '2018-'.$mon.'-25';
 
-            $user_sql = new sql_class($select_sql);
+            $select_sql    = 'select * from '.self::$table_name.' where date between '.'\''.$startDate.'\''.' and '.'\''.$endDate.'\''.' order by date asc';
+            $user_sql      = new sql_class($select_sql);
             $select_status = $user_sql->doSql($select_sql);
+            
             $arr = array();
             $i = 0;
             while($row = $select_status->fetch_assoc()) {
@@ -102,9 +105,13 @@
         }
 
         public function showSummary($mon) {
-            $select_sql = 'select sum(overTime) as overTime, sum(meal_money) as meal_money from '.self::$table_name.' where month='.$mon.' order by date asc';
-            $user_sql = new sql_class($select_sql);
+            $startDate = '2018-'.($mon-1).'-26';
+            $endDate   = '2018-'.$mon.'-25';
+
+            $select_sql = 'select sum(overTime) as overTime, sum(meal_money) as meal_money from '.self::$table_name.' where date between '.'\''.$startDate.'\''.' and '.'\''.$endDate.'\''.' order by date asc';
+            $user_sql   = new sql_class($select_sql);
             $select_status = $user_sql->doSql($select_sql);
+
             $arr = array();
             $i = 0;
             while($row = $select_status->fetch_assoc()) {
@@ -112,6 +119,14 @@
             }
 
             echo json_encode(['code'=>1, 'msg'=>'summary success', "data" => $arr]);
+        }
+
+        public function deleteErro($id) {
+            $delete_sql = 'delete from '.self::$table_name.' where id = '.$id;
+            $user_sql   = new sql_class($delete_sql);
+            $delete_status = $user_sql->doSql($delete_sql);
+
+            ifElse($delete_status, 'delete success', 'delete error');
         }
 
     }

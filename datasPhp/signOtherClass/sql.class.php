@@ -21,7 +21,8 @@
         public function doSql() {
             $result = $this->conn->query($this->sql);
             if($this->conn->errno) {
-                die('operation error'.$this->conn->error);
+                echo json_encode(['code'=>0, 'msg'=>$this->conn->errno]);
+                die();
             }
             return $result;
         }

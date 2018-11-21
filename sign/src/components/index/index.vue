@@ -71,6 +71,7 @@
                 width="100">
                 <template slot-scope="scope">
                     <el-button @click="handleClick(scope)" type="text" size="small">修改</el-button>
+                    <el-button @click="deleteError(scope)" type="text" size="small">删除</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -109,9 +110,11 @@
                 default_time: '2018-08-18 18:00:00',
                 punch_card: 1,
                 showRecode: 2,
-                mon_summary: 3
+                mon_summary: 3,
+                deleteErro: 4
             },
             dutyTime:{
+                id: '',
                 date: '',
                 startTime: '',
                 endTime: '',
@@ -135,13 +138,6 @@
     },
     watch: {
         'dutyTime.endTime': function(newValue, oldValue) {
-            // var defaultTime = (new Date('2018-08-08 18:00:00')).getTime();
-            // var nowVal = '2018-08-08 '+newValue;
-            // console.log(nowVal)
-            // var nowTime = (new Date(nowVal)).getTime();
-            // var hours=Math.floor(leave1/(3600*1000))
-            // console.log(nowTime-defaultTime);
-            // console.log(hours);
         }
     },
     mounted() {
@@ -189,17 +185,21 @@
         handleClick(scope) {
             this.dutyTime = scope.row;
         },
+        deleteError(scope) {
+            var self = this;
+            self.dutyTime.id = scope.row.id;
+            self.dutyTime.action = self.constVal.deleteErro;
+            saveTime(self.dutyTime).then((res) => {
+                if(!!res.code) {
+                    self.msg('success',res.msg);
+                    self.tableData = self.tableData.filter((item) => { return item.id!=scope.row.id });
+                } else {
+                    self.msg('error',res.msg);
+                }
+            })
+        },
         showRecord() {
             var self = this;
-            // if(!self.checkMonth()) return;
-            // self.dutyTime.action = self.constVal.showRecode;
-            // if(self.dutyTime.month != self.month) {
-            //     self.month = self.dutyTime.month;
-            //     self.isShowRecord = true;
-            // } else {
-            //     self.isShowRecord = !self.isShowRecord;
-            //     return;
-            // }
             if(self.month != 0) {
                 self.month = 0;
             }
@@ -236,14 +236,6 @@
         },
         monSummary() {
             var self = this;
-            // if(!self.checkMonth()) return;
-            // if(self.dutyTime.month != self.month) {
-            //     self.month = self.dutyTime.month;
-            //     self.isShowSummary = true;
-            // } else {
-            //     self.isShowSummary = !self.isShowSummary;
-            //     return;
-            // }
             if(self.month != 0) {
                 self.month = 0;
             }

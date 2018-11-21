@@ -17,9 +17,10 @@
     $action = $_REQUEST['action'];
     $mon = $_REQUEST['month'];
     $id = $_REQUEST['id'];
+    $reason = $_REQUEST['reason'];
     $userId = $_SESSION['userId'];
 
-    $saveTimeService = new saveTimeService($userId,$date,$month,$startTime,$endTime);
+    $saveTimeService = new saveTimeService($userId,$date,$month,$startTime,$endTime,$reason);
     if($action == 1) { //打卡
         $saveTimeService->timePre();
     } else if($action == 2) { //显示记录

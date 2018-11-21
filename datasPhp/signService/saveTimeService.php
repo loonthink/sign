@@ -10,15 +10,17 @@
         private $timeType;
         private $user_id;
         private $month;
+        private $reason;
 
         public static $table_name = 'sign_time';
 
-        public function __construct( $user_id, $date, $month, $startTime, $endTime) {
+        public function __construct( $user_id, $date, $month, $startTime, $endTime, $reason) {
             $this->date = $date;
             $this->startTime = $startTime;
             $this->endTime = $endTime;
             $this->user_id = $user_id;
             $this->month = $month;
+            $this->reason = $reason;
         }
 
         public function timePre() {
@@ -37,7 +39,7 @@
         }
 
         public function saveStart() {
-            $insert_sql = 'insert into '.self::$table_name.' (user_id, date, month, startTime, endTime) values ('.'\''.$this->user_id.'\''.','.'\''.$this->date.'\''.','.'\''.$this->month.'\''.','.'\''.$this->startTime.'\''.','.'\''.$this->endTime.'\''.')';
+            $insert_sql = 'insert into '.self::$table_name.' (user_id, date, month, startTime, endTime, reason) values ('.'\''.$this->user_id.'\''.','.'\''.$this->date.'\''.','.'\''.$this->month.'\''.','.'\''.$this->startTime.'\''.','.'\''.$this->endTime.'\''.','.'\''.$this->reason.'\''.')';
             $user_sql = new sql_class($insert_sql);
             $insert_status = $user_sql->doSql($insert_sql);
 
@@ -52,9 +54,9 @@
             };            
             
             $overTime = $this->calculateDura($this->endTime,$this->startTime);
-            $meal_money = $this->cal_money($this->endTime);
+            $meal_money = $this->cal_money($this->startTime,$this->endTime);
 
-            $update_sql = 'update '.self::$table_name.' set '.'startTime='.'\''.$this->startTime.'\''.','.'endTime='.'\''.$this->endTime.'\''.','.'overTime='.$overTime.','.'meal_money='.$meal_money.' where id='.$time['id'];
+            $update_sql = 'update '.self::$table_name.' set '.'startTime='.'\''.$this->startTime.'\''.','.'endTime='.'\''.$this->endTime.'\''.','.'overTime='.$overTime.','.'meal_money='.$meal_money.','.'reason='.'\''.$this->reason.'\''.' where id='.$time['id'];
             $user_sql = new sql_class($update_sql);
             $update_status = $user_sql->doSql($update_sql);
 
@@ -78,10 +80,15 @@
 
         }
 
-        public function cal_money($endTime) {
+        public function cal_money($startTime,$endTime) {
             $meal_money = 18;
+
             if(explode(':',$endTime)[0] > '18' && explode(':',$endTime)[0] != '16') {
                 $meal_money = 2*18;
+            }
+
+            if($startTime == '00:00:00') {
+                $meal_money = 0;
             }
 
             return $meal_money;

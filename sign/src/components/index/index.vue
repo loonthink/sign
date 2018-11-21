@@ -5,7 +5,8 @@
             type="date"
             format="yyyy 年 MM 月 dd 日"
             value-format="yyyy-MM-dd"
-            placeholder="选择日期">
+            style="width:190px;"
+            placeholder="Date">
         </el-date-picker>
          <el-time-picker
             arrow-control
@@ -14,7 +15,8 @@
                 selectableRange: '08:00:00 - 10:30:00'
             }"
             value-format="HH:mm:ss"
-            placeholder="任意时间点">
+            style="width:190px;"
+            placeholder="ON-TIME">
         </el-time-picker>
         <el-time-picker
             arrow-control
@@ -23,8 +25,16 @@
                 selectableRange: '15:30:00 - 22:30:00'
             }"
             value-format="HH:mm:ss"
-            placeholder="任意时间点">
+            style="width:190px;"
+            placeholder="OFF-TIME">
         </el-time-picker>
+        <el-input
+            placeholder="Reason"
+            v-model="dutyTime.reason"
+            @blur="clearTime"
+            style="width:200px;"
+            clearable>
+        </el-input>
         <el-button type="primary" @click=startTime>PUNCH CARD</el-button>
 
         <div
@@ -63,6 +73,10 @@
                 </el-table-column>
                 <el-table-column
                 prop="endTime"
+                label="OFFDUTY">
+                </el-table-column>
+                <el-table-column
+                prop="reason"
                 label="OFFDUTY">
                 </el-table-column>
                 <el-table-column
@@ -120,7 +134,7 @@
                 endTime: '',
                 action: false,
                 month: 0,
-                duration: 0
+                reason: ''
             },
             isShowRecord: false,
             isShowSummary: false,
@@ -152,7 +166,7 @@
     methods: {
         checkDutyTime() {
             var self = this;
-            if(!!self.dutyTime.date && (!!self.dutyTime.startTime || !!self.dutyTime.endTime)) {
+            if(!!self.dutyTime.date && ((!!self.dutyTime.startTime || !!self.dutyTime.endTime) || !!self.dutyTime.reason)) {
                 return true;
             } else {
                 return false;
@@ -244,6 +258,12 @@
             saveTime(self.dutyTime).then((res) => {
                 self.summaryTable = res.data;
             })
+        },
+        clearTime(item) {
+            if( !!this.dutyTime.reason ) {
+                this.dutyTime.startTime = '';
+                this.dutyTime.endTime = '';
+            }
         }
     }
   }

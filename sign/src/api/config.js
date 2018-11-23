@@ -5,3 +5,5 @@ export const timeUrl = 'http://localhost:88/sign/datasPhp/signProgress/saveTime.
 export const sessionUrl = 'http://localhost:88/sign/datasPhp/common/filter.progress.php'
 
 export const checkCode = 'http://localhost:88/sign/datasPhp/signOtherClass/checkCode.php'
+
+export const excelUrl = 'http://localhost:88/sign/datasPhp/signService/exportExcelService.php'

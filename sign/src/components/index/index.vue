@@ -50,6 +50,7 @@
             </el-date-picker>
             <el-button type="primary" @click=showRecord>SHOWRECORD</el-button>
             <el-button type="primary" @click=monSummary>MONSUMMARY</el-button>
+            <el-button type="primary" @click=excel>EXPORT</el-button>
         </div>
 
         <div 
@@ -115,7 +116,7 @@
 </template>
 
 <script>
-  import { testSession, saveTime } from '@/api/http';
+  import { testSession, saveTime, excel } from '@/api/http';
 
   export default {
     data() {
@@ -264,6 +265,9 @@
                 this.dutyTime.startTime = '';
                 this.dutyTime.endTime = '';
             }
+        },
+        excel() {
+            window.location = 'http://localhost:88/sign/datasPhp/signService/exportExcelService.php?month=11'
         }
     }
   }

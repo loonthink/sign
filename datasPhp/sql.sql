@@ -34,6 +34,7 @@ create table if not exists sign_time (
 	`id` int primary key AUTO_INCREMENT,
 	`user_id` int not null,
 	`month` varchar(10) not null,
+	`reason` varchar(30) default '无',
 	`date` date not null,
 	`startTime` time DEFAULT null,
 	`endTime` time DEFAULT null,

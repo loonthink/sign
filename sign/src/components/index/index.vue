@@ -44,8 +44,7 @@
             v-model="dutyTime.month"
             type="month"
             placeholder="选择月"
-            value-format="MM"
-            format="MM"
+            value-format="yyyy-M"
             >
             </el-date-picker>
             <el-button type="primary" @click=showRecord>SHOWRECORD</el-button>
@@ -134,7 +133,7 @@
                 startTime: '',
                 endTime: '',
                 action: false,
-                month: 0,
+                month: '',
                 reason: ''
             },
             isShowRecord: false,

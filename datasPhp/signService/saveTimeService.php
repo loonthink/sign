@@ -95,8 +95,16 @@
         }
 
         public function showAllTime($mon) {
+            $year = explode('-', $mon)[0];
+            $mon = explode('-', $mon)[1];
+
             $startDate = '2018-'.($mon-1).'-26';
             $endDate   = '2018-'.$mon.'-25';
+
+            if($mon == 1) {
+                $startDate = ($year-1).'-12-26';
+                $endDate   = $year.'-1-25';
+            }
 
             $select_sql    = 'select * from '.self::$table_name.' where date between '.'\''.$startDate.'\''.' and '.'\''.$endDate.'\''.' order by date asc';
             $user_sql      = new sql_class($select_sql);
@@ -112,8 +120,16 @@
         }
 
         public function showSummary($mon) {
+            $year = explode('-', $mon)[0];
+            $mon = explode('-', $mon)[1];
+
             $startDate = '2018-'.($mon-1).'-26';
             $endDate   = '2018-'.$mon.'-25';
+
+            if($mon == 1) {
+                $startDate = ($year-1).'-12-26';
+                $endDate   = $year.'-1-25';
+            }
 
             $select_sql = 'select sum(overTime) as overTime, sum(meal_money) as meal_money from '.self::$table_name.' where date between '.'\''.$startDate.'\''.' and '.'\''.$endDate.'\''.' order by date asc';
             $user_sql   = new sql_class($select_sql);
